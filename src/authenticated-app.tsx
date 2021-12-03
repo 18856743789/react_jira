@@ -5,9 +5,10 @@ import React from "react";
 import { ProjectListScreen } from "screens/project-list";
 import { ReactComponent as JiraLogo } from 'assets/Jira.svg'
 import { Button, Dropdown, Menu } from "antd";
-import { Route, Routes } from 'react-router'
-import { BrowserRouter as Router } from 'react-router-dom'
+// import { Route, Routes, Navigate } from 'react-router'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import { ProjectScreen } from "screens/project";
+import { resetRoute } from "utils";
 /**
  * grid和flex 各自的应用场景
  * 1.要考虑是一维布局 还是二维布局 
@@ -25,8 +26,10 @@ export const AuthenticatedApp = () => {
             <Main>
                 <Router>
                     <Routes>
-                        <Route path={'/projects'} element={<ProjectListScreen />}/>
-                        <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}/>
+                        <Route path={'/projects'} element={<ProjectListScreen />} />
+                        <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
+                        {/* <Navigate to='/projects' /> */}
+
                     </Routes>
                 </Router>
             </Main>
@@ -39,7 +42,10 @@ const PageHeader = () => {
     return (
         <Header between={true}>
             <HeaderLeft gap={true}>
-                <JiraLogo width={'10rem'} color={"rgb(38,132,255)"} />
+                <Button type={'link'} onClick={resetRoute}>
+                    <JiraLogo width={'5rem'} color={"rgb(38,132,255)!important"} height={'32px'} />
+                    <h2 style={{ float: "right" }}>Jira Software</h2>
+                </Button>
                 <h2>项目</h2>
                 <h2>用户</h2>
             </HeaderLeft>
@@ -75,6 +81,4 @@ const HeaderLeft = styled(Row)`
 `
 const HeaderRight = styled.div``
 const Main = styled.main``
-
-
-
+const LogoButton = styled(Button)``
