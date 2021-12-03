@@ -8,19 +8,13 @@ import { Typography } from "antd"
 import { useProjects } from "utils/project"
 import { useUsers } from "utils/user"
 import { useUrlQueryParam } from "utils/url"
-
-
-export const ProjectListScreen = () => {
-    // const [, setParam] = useState({
-    //     name: '',
-    //     personId: ''
-    // })
+import { useProjectsSerachParams } from "./utils"
     // 基本类型可以放在依赖里 组件状态 可以放在依赖里 非组件状态的对象 绝对不可以放到依赖里
     // http://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js
-    // const [keys] = useState<('name' | 'personId')[]>(['name','personId'])
-    const [param,setParam] = useUrlQueryParam(['name','personId'])
-    const debounceParam = useDebounce(param, 200)
-    const { isLoading, error, data: list } = useProjects(debounceParam)
+
+export const ProjectListScreen = () => {
+    const [param ,setParam]= useProjectsSerachParams()
+    const { isLoading, error, data: list } = useProjects(useDebounce(param, 200))
     const { data: users } = useUsers()
     console.log(useUrlQueryParam(['name']))
 
