@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { start } from "repl"
 import { useMountedRef } from "utils"
 
@@ -30,20 +30,20 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
 
     })
 
-    const setData = (data: D) => setState({
+    const setData = useCallback((data: D) => setState({
         data,
         start: 'success',
         error: null
-    })
+    }), [])
 
-    const setError = (error: Error) => setState({
+    const setError = useCallback((error: Error) => setState({
         error,
         start: 'error',
         data: null
-    })
+    }), [])
 
     // run用来出发异步请求
-    const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+    const run = useCallback((promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
         if (!promise || !promise.then) {
             throw new Error("请传入promise类型数据")
         }
@@ -53,7 +53,7 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
             }
         }
         )
-        setState({ ...state, start: 'loading' })
+        setState(prevState => ({ ...prevState, start: 'loading' }))
         return promise
             .then(data => {
                 if (mountedRef.current)
@@ -66,7 +66,8 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
                 return error
 
             })
-    }
+    }, [config.throwOnError, mountedRef, setData, setError]
+    )
     return {
         isIdle: state.start === 'idle',
         isLoading: state.start === 'loading',
