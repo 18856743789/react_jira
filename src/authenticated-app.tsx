@@ -5,8 +5,8 @@ import React from "react";
 import { ProjectListScreen } from "screens/project-list";
 import { ReactComponent as JiraLogo } from 'assets/Jira.svg'
 import { Button, Dropdown, Menu } from "antd";
-// import { Route, Routes, Navigate } from 'react-router'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
 /**
@@ -24,14 +24,11 @@ export const AuthenticatedApp = () => {
         <Container>
             <PageHeader />
             <Main>
-                <Router>
-                    <Routes>
-                        <Route path={'/projects'} element={<ProjectListScreen />} />
-                        <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
-                        {/* <Navigate to='/projects' /> */}
-
-                    </Routes>
-                </Router>
+                <Routes>
+                    <Route path={'/projects'} element={<ProjectListScreen />} />
+                    <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
+                    {/* <Navigate to='/projects' /> */}
+                </Routes>
             </Main>
         </Container>
     )

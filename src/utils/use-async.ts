@@ -22,6 +22,12 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
         ...initialState
     })
 
+    //useState 直接传入函数的含义是：惰性初始化；所以，要用useState保存函数，不能直接传入函数 
+
+    const [retry, setRetry] = useState(() => () => {
+
+    })
+
     const setData = (data: D) => setState({
         data,
         start: 'success',
@@ -35,10 +41,16 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
     })
 
     // run用来出发异步请求
-    const run = (promise: Promise<D>) => {
+    const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
         if (!promise || !promise.then) {
             throw new Error("请传入promise类型数据")
         }
+        setRetry(() => () => {
+            if (runConfig?.retry) {
+                run(runConfig?.retry(), runConfig)
+            }
+        }
+        )
         setState({ ...state, start: 'loading' })
         return promise
             .then(data => {
@@ -60,6 +72,7 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
         run,
         setData,
         setError,
+        retry,
         ...state
     }
 }

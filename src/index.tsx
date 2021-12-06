@@ -7,13 +7,16 @@ import reportWebVitals from './reportWebVitals';
 import { AppProviders } from 'context';
 import { DevTools, loadServer } from "jira-dev-tool";
 import "antd/dist/antd.less"
+import { BrowserRouter } from "react-router-dom"
 
 loadServer(() => {
   ReactDOM.render(
     <React.StrictMode>
       <AppProviders>
         <DevTools />
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </AppProviders>
     </React.StrictMode>,
     document.getElementById("root")
