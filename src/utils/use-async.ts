@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { start } from "repl"
+import { useMountedRef } from "utils"
 
 interface State<D> {
     error: Error | null;
@@ -21,6 +22,7 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
         ...defaultInitialState,
         ...initialState
     })
+    const mountedRef = useMountedRef()
 
     //useState 直接传入函数的含义是：惰性初始化；所以，要用useState保存函数，不能直接传入函数 
 
@@ -54,7 +56,8 @@ export const useAsync = <D>(initialState?: State<D>, intialConfig?: typeof defau
         setState({ ...state, start: 'loading' })
         return promise
             .then(data => {
-                setData(data)
+                if (mountedRef.current)
+                    setData(data)
                 return data
             })
             .catch(error => {
