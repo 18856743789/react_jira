@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { useAuth } from "context/auth-context";
-import React from "react";
+import React, { useState } from "react";
 import { ProjectListScreen } from "screens/project-list";
 import { ReactComponent as JiraLogo } from 'assets/Jira.svg'
 import { Button, Dropdown, Menu } from "antd";
@@ -9,6 +9,8 @@ import { Route, Routes, Navigate } from 'react-router'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
+import { ProjectModal } from "screens/project-list/project-modal";
+import { ProjectPopover } from "components/project-popover";
 /**
  * grid和flex 各自的应用场景
  * 1.要考虑是一维布局 还是二维布局 
@@ -20,48 +22,56 @@ import { resetRoute } from "utils";
  */
 
 export const AuthenticatedApp = () => {
+    const [projectModalOpen, setProjectModalOpen] = useState(false)
+
     return (
         <Container>
-            <PageHeader />
+            <PageHeader setProjectModalOpen={setProjectModalOpen} />
             <Main>
                 <Routes>
-                    <Route path={'/projects'} element={<ProjectListScreen />} />
+                    <Route path={'/projects'} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen} />} />
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
                     {/* <Navigate to='/projects' /> */}
                 </Routes>
             </Main>
+            <ProjectModal projectModalOpen={projectModalOpen} onClose={() => setProjectModalOpen(false)}></ProjectModal>
         </Container>
     )
 }
 
-const PageHeader = () => {
-    const { logout, user } = useAuth()
+const PageHeader = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
     return (
         <Header between={true}>
             <HeaderLeft gap={true}>
-                <Button type={'link'} onClick={resetRoute}>
+                <ButtonNoPadding type={'link'} onClick={resetRoute} style={{ padding: 0 }}>
                     <JiraLogo width={'5rem'} color={"rgb(38,132,255)!important"} height={'32px'} />
-                    <h2 style={{ float: "right" }}>Jira Software</h2>
-                </Button>
-                <h2>项目</h2>
-                <h2>用户</h2>
+                    <h2 style={{ float: "right", marginBottom: '2rem' }}>Jira Software</h2>
+                </ButtonNoPadding>
+                <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} />
+                <span>用户</span>
             </HeaderLeft>
             <HeaderRight>
-                <Dropdown overlay={
-                    <Menu>
-                        <Menu.Item key={'logout'}>
-                            <Button onClick={logout} type={"link"}>登出</Button>
-                        </Menu.Item>
-                    </Menu>
-                }>
-                    <Button type={"link"} onClick={e => e.preventDefault()}>
-                        Hi,{user?.name}
-                    </Button>
-                </Dropdown>
+                <User />
             </HeaderRight>
         </Header>
     )
 
+}
+const User = () => {
+    const { logout, user } = useAuth()
+    return (
+        <Dropdown overlay={
+            <Menu>
+                <Menu.Item key={'logout'}>
+                    <Button onClick={logout} type={"link"}>登出</Button>
+                </Menu.Item>
+            </Menu>
+        }>
+            <Button type={"link"} onClick={e => e.preventDefault()}>
+                Hi,{user?.name}
+            </Button>
+        </Dropdown>
+    )
 }
 const Container = styled.div`
 display:grid;
@@ -78,4 +88,3 @@ const HeaderLeft = styled(Row)`
 `
 const HeaderRight = styled.div``
 const Main = styled.main``
-const LogoButton = styled(Button)``

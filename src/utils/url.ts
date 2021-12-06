@@ -6,7 +6,6 @@ import { cleanObject } from "utils";
  * 返回页面url中，指定键的参数值
  */
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
-    console.log(keys);
     const [searchParams, setSearchParam] = useSearchParams()
     return [
         useMemo(() => keys.reduce((prev, key) => {

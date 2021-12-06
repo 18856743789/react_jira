@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { Spin, Typography } from "antd";
+import { Button, Spin, Typography } from "antd";
 import { DevTools } from "jira-dev-tool";
 import React from "react";
 
 export const Row = styled.div<{
-    gap?:number | boolean,
-    between?:boolean,
-    marginBottom?:number
+    gap?: number | boolean,
+    between?: boolean,
+    marginBottom?: number
 }>`
 display:flex;
 align-items:center;
@@ -28,7 +28,11 @@ export const FullPageLoading = () => <FullPage>
     <Spin size={'large'}></Spin>
 </FullPage>
 
-export const FullPageErrorFallback = ({error}:{error:Error}) => <FullPage>
-    <DevTools/>
+export const FullPageErrorFallback = ({ error }: { error: Error }) => <FullPage>
+    <DevTools />
     <Typography.Text type={'danger'}>{error.message}</Typography.Text>
 </FullPage>
+
+export const ButtonNoPadding = styled(Button)`
+padding:0;
+`
