@@ -13,19 +13,19 @@ import { Row } from "components/lib"
 // 基本类型可以放在依赖里 组件状态 可以放在依赖里 非组件状态的对象 绝对不可以放到依赖里
 // http://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js
 
-export const ProjectListScreen = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
+export const ProjectListScreen = (props: { projectButton: JSX.Element }) => {
     const [param, setParam] = useProjectsSerachParams()
     const { isLoading, error, data: list, retry } = useProjects(useDebounce(param, 200))
     const { data: users } = useUsers()
     return <Container>
         <Row between={true}>
             <h1>项目列表</h1>
-            <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+            {props.projectButton}
         </Row>
 
         <SearchPanel users={users || []} param={param} setParam={setParam} />
         {error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null}
-        <List setProjectModalOpen={props.setProjectModalOpen} refresh={retry} loading={isLoading} users={users || []} dataSource={list || []} />
+        <List projectButton={props.projectButton} refresh={retry} loading={isLoading} users={users || []} dataSource={list || []} />
     </Container>
 }
 
