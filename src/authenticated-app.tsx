@@ -26,9 +26,7 @@ export const AuthenticatedApp = () => {
 
     return (
         <Container>
-            <PageHeader projectButton={<ButtonNoPadding type={'link'} onClick={() => setProjectModalOpen(true)}>
-                创建项目
-            </ButtonNoPadding>} />
+            <PageHeader />
             <Main>
                 <Routes>
                     <Route path={'/projects'} element={<ProjectListScreen projectButton={<ButtonNoPadding type={'link'} onClick={() => setProjectModalOpen(true)}>
@@ -38,12 +36,12 @@ export const AuthenticatedApp = () => {
                     {/* <Navigate to='/projects' /> */}
                 </Routes>
             </Main>
-            <ProjectModal projectModalOpen={projectModalOpen} onClose={() => setProjectModalOpen(false)}></ProjectModal>
+            <ProjectModal />
         </Container>
     )
 }
 
-const PageHeader = (props: { projectButton: JSX.Element }) => {
+const PageHeader = () => {
     return (
         <Header between={true}>
             <HeaderLeft gap={true}>
@@ -51,7 +49,7 @@ const PageHeader = (props: { projectButton: JSX.Element }) => {
                     <JiraLogo width={'5rem'} color={"rgb(38,132,255)!important"} height={'32px'} />
                     <h2 style={{ float: "right", marginBottom: '2rem' }}>Jira Software</h2>
                 </ButtonNoPadding>
-                <ProjectPopover {...props} />
+                <ProjectPopover  />
                 <span>用户</span>
             </HeaderLeft>
             <HeaderRight>
